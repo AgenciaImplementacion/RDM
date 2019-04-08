@@ -1,0 +1,109 @@
+{
+  "predio": {
+    "Departamento": "70",
+    "Municipio": "508",
+    "zona": "0",
+    "nupre": "123",
+    "fmi": "7546",
+    "tipo": "NPH",
+    "numero_predial": "705080002000000050134000000000",
+    "numero_predial_anterior": "70508000200050134000"
+  },
+  "terreno": {
+    "area_de_terreno": 152428.9,
+    "direccion": [
+      {
+        "pais": "pais",
+        "departamento": "bogota",
+        "ciudad": "bogota",
+        "codigo_postal": "11001",
+        "apartado_correo": null,
+        "nombre_calle": "calle"
+      },
+      {
+        "pais": "prueba",
+        "departamento": "prueba",
+        "ciudad": "prueba",
+        "codigo_postal": "prueba",
+        "apartado_correo": "prueba",
+        "nombre_calle": "prueba"
+      }
+    ],
+    "geometria": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -74.15192127227783,
+                  4.616293404098496
+                ],
+                [
+                  -74.15125608444214,
+                  4.612357989392307
+                ],
+                [
+                  -74.1442608833313,
+                  4.613876548738824
+                ],
+                [
+                  -74.14539813995361,
+                  4.616892269640879
+                ],
+                [
+                  -74.15192127227783,
+                  4.616293404098496
+                ]
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "construccion": [
+    {
+      "geometria": {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    -74.14951801300049,
+                    4.614839014248636
+                  ],
+                  [
+                    -74.14889574050903,
+                    4.6140262656816144
+                  ],
+                  [
+                    -74.14831638336182,
+                    4.614518192557022
+                  ],
+                  [
+                    -74.14891719818115,
+                    4.615309552467393
+                  ],
+                  [
+                    -74.14951801300049,
+                    4.614839014248636
+                  ]
+                ]
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
