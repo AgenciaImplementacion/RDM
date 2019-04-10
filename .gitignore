@@ -29,3 +29,5 @@ bin/
 
 ### VS Code ###
 .vscode/
+
+.attach*
