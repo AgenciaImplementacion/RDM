@@ -13,6 +13,11 @@ repositories {
 	mavenCentral()
 }
 
+bootJar {
+    baseName = 'rdm-server'
+    version =  '0.1.0'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

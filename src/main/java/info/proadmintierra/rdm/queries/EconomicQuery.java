@@ -141,7 +141,7 @@ public class EconomicQuery {
                 query += ")) ORDER BY unidadconstruccion.t_id) FILTER(WHERE unidadconstruccion.t_id IS NOT NULL)  as unidadconstruccion FROM {schema}.unidadconstruccion";
 
                 if (valuation_model) {
-                        query += "LEFT JOIN {schema}.avaluounidadconstruccion ON unidadconstruccion.t_id = avaluounidadconstruccion.ucons"
+                        query += " LEFT JOIN {schema}.avaluounidadconstruccion ON unidadconstruccion.t_id = avaluounidadconstruccion.ucons"
                                         + "         LEFT JOIN {schema}.unidad_construccion ON avaluounidadconstruccion.aucons = unidad_construccion.t_id"
                                         + "         LEFT JOIN info_calificacion_convencional ON unidad_construccion.t_id = info_calificacion_convencional.aucons"
                                         + "         LEFT JOIN info_calificacion_no_convencional ON unidad_construccion.t_id = info_calificacion_no_convencional.aucons";
@@ -178,10 +178,10 @@ public class EconomicQuery {
                 query += " 'construccion', COALESCE(info_construccion.construccion, '[]')"
                                 + "                                                                 )) ORDER BY predio.t_id) FILTER(WHERE predio.t_id IS NOT NULL) as predio"
                                 + "         FROM {schema}.predio LEFT JOIN {schema}.uebaunit ON uebaunit.baunit_predio = predio.t_id"
-                                + "         LEFT JOIN info_construccion ON predio.t_id = info_construccion.baunit_predio";
+                                + "         LEFT JOIN info_construccion ON predio.t_id = info_construccion.baunit_predio ";
 
                 if (property_record_card_model) {
-                        query += "LEFT JOIN {schema}.predio_ficha ON predio_ficha.crpredio = predio.t_id";
+                        query += " LEFT JOIN {schema}.predio_ficha ON predio_ficha.crpredio = predio.t_id";
                 }
 
                 query += " WHERE predio.t_id IN (SELECT * FROM predios_seleccionados) "
@@ -191,7 +191,7 @@ public class EconomicQuery {
                                 + "		 GROUP BY uebaunit.ue_terreno" + "     ),";
 
                 if (valuation_model) {
-                        query += "info_zona_homogenea_geoeconomica AS (" + "        SELECT terreno.t_id,"
+                        query += " info_zona_homogenea_geoeconomica AS (" + "        SELECT terreno.t_id,"
                                         + "            json_agg("
                                         + "                    json_build_object('id', zona_homogenea_geoeconomica.t_id,"
                                         + "                                           'attributes', json_build_object('Porcentaje', ROUND((st_area(st_intersection(terreno.poligono_creado, zona_homogenea_geoeconomica.geometria))/ st_area(terreno.poligono_creado))::numeric * 100,2),"
@@ -231,7 +231,7 @@ public class EconomicQuery {
                 query += ", 'predio', COALESCE(info_predio.predio, '[]'))) as terreno FROM {schema}.terreno LEFT JOIN info_predio ON info_predio.ue_terreno = terreno.t_id";
 
                 if (valuation_model) {
-                        query += "LEFT JOIN info_zona_homogenea_geoeconomica ON info_zona_homogenea_geoeconomica.t_id = terreno.t_id"
+                        query += " LEFT JOIN info_zona_homogenea_geoeconomica ON info_zona_homogenea_geoeconomica.t_id = terreno.t_id"
                                         + "        LEFT JOIN info_zona_homogenea_fisica ON info_zona_homogenea_fisica.t_id = terreno.t_id";
                 }
 

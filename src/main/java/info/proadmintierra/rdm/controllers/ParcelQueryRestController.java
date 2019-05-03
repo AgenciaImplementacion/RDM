@@ -59,6 +59,29 @@ public class ParcelQueryRestController {
         try {
             Postgres conn = new Postgres();
             conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
+            sql = "select st_asgeojson(ST_Transform(t.poligono_creado, 3857)) from " + rdmSchema
+                    + ".terreno t join "+ rdmSchema +".uebaunit u on t.t_id=u.ue_terreno join "+ rdmSchema +".predio p on p.t_id=u.baunit_predio where p.t_id = " + id;
+            // sql = "select st_asgeojson(ST_Transform(terreno.poligono_creado, 4326)) from
+            // " + rdmSchema + ".terreno where terreno.t_id = " + id;
+            System.out.println("SQL: " + sql);
+            String response = conn.query(sql);
+            conn.disconnect();
+            if (response != null)
+                return response;
+            else
+                return "{\"error\":\"No se encontraron registros.\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+
+    @GetMapping(value = "/terrain/geometry", produces = { "application/json" })
+    public String getTerrainBasicInfo(@RequestParam(required = false) Integer id) {
+        String sql = "";
+        try {
+            Postgres conn = new Postgres();
+            conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
             sql = "select st_asgeojson(ST_Transform(terreno.poligono_creado, 3857)) from " + rdmSchema
                     + ".terreno where terreno.t_id = " + id;
             // sql = "select st_asgeojson(ST_Transform(terreno.poligono_creado, 4326)) from
