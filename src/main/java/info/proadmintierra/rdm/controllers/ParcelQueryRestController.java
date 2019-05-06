@@ -53,7 +53,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/private/parcel/geometry", produces = { "application/json" })
+    @GetMapping(value = "/public/parcel/geometry", produces = { "application/json" })
     public String getParcelBasicInfo(@RequestParam(required = false) Integer id) {
         String sql = "";
         try {
@@ -76,7 +76,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/private/terrain/geometry", produces = { "application/json" })
+    @GetMapping(value = "/public/terrain/geometry", produces = { "application/json" })
     public String getTerrainBasicInfo(@RequestParam(required = false) Integer id) {
         String sql = "";
         try {
