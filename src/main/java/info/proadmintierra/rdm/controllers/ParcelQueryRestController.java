@@ -18,7 +18,7 @@ import info.proadmintierra.rdm.drivers.Postgres;
  * ParcelQueryRestController
  */
 @RestController
-@RequestMapping("/query")
+@RequestMapping("/api")
 @CrossOrigin(origins = { "http://localhost:4200", "*" })
 public class ParcelQueryRestController {
 
@@ -33,7 +33,7 @@ public class ParcelQueryRestController {
     @Value("${spring.datasource.driver-class-name}")
     private String classForName;
 
-    @GetMapping(value = "/parcel", produces = { "application/json" })
+    @GetMapping(value = "/public/parcel", produces = { "application/json" })
     public String getParcelBasicInfo(@RequestParam(required = false) String nupre,
             @RequestParam(required = false) String cadastralCode, @RequestParam(required = false) String fmi) {
         String sql = "";
@@ -53,7 +53,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/parcel/geometry", produces = { "application/json" })
+    @GetMapping(value = "/private/parcel/geometry", produces = { "application/json" })
     public String getParcelBasicInfo(@RequestParam(required = false) Integer id) {
         String sql = "";
         try {
@@ -76,7 +76,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/terrain/geometry", produces = { "application/json" })
+    @GetMapping(value = "/private/terrain/geometry", produces = { "application/json" })
     public String getTerrainBasicInfo(@RequestParam(required = false) Integer id) {
         String sql = "";
         try {
@@ -99,7 +99,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/parcel/economic", produces = { "application/json" })
+    @GetMapping(value = "/private/parcel/economic", produces = { "application/json" })
     public String getParcelEconomicInfo(@RequestParam(required = false) String nupre,
             @RequestParam(required = false) String cadastralCode, @RequestParam(required = false) String fmi) {
         String sql = "";
@@ -119,7 +119,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/parcel/legal", produces = { "application/json" })
+    @GetMapping(value = "/private/parcel/legal", produces = { "application/json" })
     public String getParcelLegalInfo(@RequestParam(required = false) String nupre,
             @RequestParam(required = false) String cadastralCode, @RequestParam(required = false) String fmi) {
         String sql = "";
@@ -139,7 +139,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/parcel/physical", produces = { "application/json" })
+    @GetMapping(value = "/private/parcel/physical", produces = { "application/json" })
     public String getParcelPhysicalInfo(@RequestParam(required = false) String nupre,
             @RequestParam(required = false) String cadastralCode, @RequestParam(required = false) String fmi) {
         String sql = "";
@@ -159,7 +159,7 @@ public class ParcelQueryRestController {
         }
     }
 
-    @GetMapping(value = "/parcel/igac_property_record_card", produces = { "application/json" })
+    @GetMapping(value = "/private/parcel/igac_property_record_card", produces = { "application/json" })
     public String getParcelIGACPropertyRecordCardInfo(@RequestParam(required = false) String nupre,
             @RequestParam(required = false) String cadastralCode, @RequestParam(required = false) String fmi) {
         String sql = "";
