@@ -31,3 +31,5 @@ bin/
 .vscode/
 
 .attach*
+
+src/main/java/META-INF/
