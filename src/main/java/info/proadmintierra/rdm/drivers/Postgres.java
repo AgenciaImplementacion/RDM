@@ -18,7 +18,20 @@ public class Postgres {
     private Connection c = null;
     private Statement stmt = null;
 
-    public String query(String sql) {
+    public ResultSet query(String sql) {
+        ResultSet response = null;
+        try {
+            this.stmt = this.c.createStatement();
+            response = this.stmt.executeQuery(sql);
+            response.next();
+            return response;
+        } catch (SQLException ex) {
+            Logger.getLogger(Postgres.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
+    }
+
+    public String queryToString(String sql) {
         String response = "";
         try {
             this.stmt = this.c.createStatement();
@@ -52,6 +65,7 @@ public class Postgres {
     public void disconnect() {
         if (this.c != null) {
             try {
+                this.stmt.close();
                 this.c.close();
             } catch (SQLException ex) {
                 Logger.getLogger(Postgres.class.getName()).log(Level.SEVERE, null, ex);
