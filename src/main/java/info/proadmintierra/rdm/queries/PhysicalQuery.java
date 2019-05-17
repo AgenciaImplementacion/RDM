@@ -140,6 +140,7 @@ public class PhysicalQuery {
                                 + "                                  'attributes', json_build_object('Nombre', predio.nombre,"
                                 + "                                                                  'NUPRE', predio.nupre,"
                                 + "                                                                  'FMI', predio.fmi,"
+                                + "                                                                  'Tipo', predio.tipo,"
                                 + "                                                                  'Número predial', predio.numero_predial,"
                                 + "                                                                  'Número predial anterior', predio.numero_predial_anterior,"
                                 + "                                                                  'construccion', COALESCE(info_construccion.construccion, '[]')"
