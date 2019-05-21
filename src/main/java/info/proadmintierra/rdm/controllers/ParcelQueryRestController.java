@@ -27,6 +27,7 @@ import info.proadmintierra.rdm.queries.BasicQuery;
 import info.proadmintierra.rdm.queries.EconomicQuery;
 import info.proadmintierra.rdm.queries.IGACPropertyRecordCardQuery;
 import info.proadmintierra.rdm.queries.LegalQuery;
+import info.proadmintierra.rdm.queries.PartyQuery;
 import info.proadmintierra.rdm.queries.PhysicalQuery;
 import info.proadmintierra.rdm.drivers.Postgres;
 
@@ -229,6 +230,26 @@ public class ParcelQueryRestController {
             Postgres conn = new Postgres();
             conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
             sql = IGACPropertyRecordCardQuery.getQuery(this.rdmSchema, null, fmi, cadastralCode, null, true);
+            String response = conn.queryToString(sql);
+            conn.disconnect();
+            if (response != null)
+                return response;
+            else
+                return "{\"error\":\"No se encontraron registros.\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+
+    @GetMapping(value = "/private/parcel/party", produces = { "application/json" })
+    public String getParcelPartyInfo(@RequestParam(required = false) String nupre,
+            @RequestParam(required = false) String cadastralCode, @RequestParam(required = false) String fmi) {
+        String sql = "";
+        try {
+            Postgres conn = new Postgres();
+            conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
+            sql = PartyQuery.getQuery(this.rdmSchema, fmi, cadastralCode, nupre);
             String response = conn.queryToString(sql);
             conn.disconnect();
             if (response != null)
