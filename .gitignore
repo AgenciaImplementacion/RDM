@@ -33,3 +33,5 @@ bin/
 .attach*
 
 src/main/java/META-INF/
+
+application.properties

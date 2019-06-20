@@ -29,6 +29,5 @@ dependencies {
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.8'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

@@ -1,17 +1,9 @@
 package info.proadmintierra.rdm.controllers;
 
-import java.awt.Image;
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.sql.ResultSet;
-
-import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.utils.URIBuilder;
@@ -23,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import info.proadmintierra.rdm.drivers.Postgres;
 import info.proadmintierra.rdm.queries.BasicQuery;
 import info.proadmintierra.rdm.queries.EconomicQuery;
 import info.proadmintierra.rdm.queries.IGACPropertyRecordCardQuery;
 import info.proadmintierra.rdm.queries.LegalQuery;
 import info.proadmintierra.rdm.queries.PartyQuery;
 import info.proadmintierra.rdm.queries.PhysicalQuery;
-import info.proadmintierra.rdm.drivers.Postgres;
 
 /**
  * ParcelQueryRestController
@@ -122,7 +114,7 @@ public class ParcelQueryRestController {
             // url.addParameter("STYLES", "");
             url.addParameter("LAYERS", "LADM:sat_basic_query");
             url.addParameter("CQL_FILTER",
-                    "(t_id=" + id + " AND layer='parcel') OR (layer='context' AND t_id<>" + id + ")");
+                    "(id=" + id + " AND layer='parcel') OR (layer='context' AND id<>" + id + ")");
             url.addParameter("SRS", "EPSG:3857");
             url.addParameter("WIDTH", "769");
             url.addParameter("HEIGHT", "763");

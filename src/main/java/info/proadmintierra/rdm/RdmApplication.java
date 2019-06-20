@@ -10,4 +10,4 @@ public class RdmApplication {
 		SpringApplication.run(RdmApplication.class, args);
 	}
 
-}
+} 
