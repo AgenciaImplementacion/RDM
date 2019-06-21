@@ -119,7 +119,7 @@ public class ParcelQueryRestController {
             url.addParameter("WIDTH", "769");
             url.addParameter("HEIGHT", "763");
             url.addParameter("BBOX", xmin + "," + ymin + "," + xmax + "," + ymax);
-            
+
             System.out.println(url.toString());
             URL ourl = new URL(url.toString());
             URLConnection geos_conn = ourl.openConnection();
@@ -242,6 +242,31 @@ public class ParcelQueryRestController {
             Postgres conn = new Postgres();
             conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
             sql = PartyQuery.getQuery(this.rdmSchema, fmi, cadastralCode, nupre);
+            String response = conn.queryToString(sql);
+            conn.disconnect();
+            if (response != null)
+                return response;
+            else
+                return "{\"error\":\"No se encontraron registros.\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
+
+    @GetMapping(value = "/private/parcel/affectations", produces = { "application/json" })
+    public String getAffectationsInfo(@RequestParam(required = false) Integer id) {
+        String sql = "";
+        try {
+            Postgres conn = new Postgres();
+            conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
+            sql = "select json_agg( json_build_object('t_id', t_id, 'objeto', CASE WHEN identificador='1' THEN 'Ronda Hidrica' WHEN identificador='2' THEN 'Area Protegida' WHEN identificador='3' THEN 'Desarrollo Restringido POT' WHEN identificador='4' THEN 'Zona Militar' END, 'area', st_area(st_intersection(geometria, (select poligono_creado from "
+                    + this.rdmSchema + ".terreno where t_id= " + id
+                    + "))), 'proportion', (st_area(st_intersection(geometria, (select poligono_creado from "
+                    + this.rdmSchema + ".terreno where t_id= " + id + ")))/st_area((select poligono_creado from "
+                    + this.rdmSchema + ".terreno where t_id= " + id + "))) ) ) from " + this.rdmSchema
+                    + ".zona_homogenea_fisica WHERE ST_Intersects(geometria, (select poligono_creado from "
+                    + this.rdmSchema + ".terreno where t_id= " + id + "))=TRUE";
             String response = conn.queryToString(sql);
             conn.disconnect();
             if (response != null)
