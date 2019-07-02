@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.3.RELEASE'
 	id 'java'
-	id 'war'
+	// id 'war'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -28,6 +28,6 @@ dependencies {
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.8'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	// providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
