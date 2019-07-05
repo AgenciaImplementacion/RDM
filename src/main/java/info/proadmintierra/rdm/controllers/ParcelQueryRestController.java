@@ -92,16 +92,20 @@ public class ParcelQueryRestController {
     public @ResponseBody byte[] getImageParcelBasicInfo(@RequestParam(required = true) Integer id) {
         String sql = "";
         try {
+            int padding = 20;
             Postgres conn = new Postgres();
             conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
             sql = "select st_xmin(bbox.g) as xmin, st_ymin(bbox.g) as ymin,st_xmax(bbox.g) as xmax, st_ymax(bbox.g) as ymax from (select st_envelope(poligono_creado) as g from "
                     + rdmSchema + ".vw_terreno where t_id=" + id + ") bbox";
             ResultSet response = conn.query(sql);
 
-            double xmin = response.getDouble(1);
-            double ymin = response.getDouble(2);
-            double xmax = response.getDouble(3);
-            double ymax = response.getDouble(4);
+            double xmin = response.getDouble(1) - padding;
+            double ymin = response.getDouble(2) - padding;
+            double xmax = response.getDouble(3) + padding;
+            double ymax = response.getDouble(4) + padding;
+
+            double x = xmax - xmin;
+            double y = ymax - ymin;
 
             conn.disconnect();
 
@@ -116,8 +120,15 @@ public class ParcelQueryRestController {
             url.addParameter("CQL_FILTER",
                     "(id=" + id + " AND layer='parcel') OR (layer='context' AND id<>" + id + ")");
             url.addParameter("SRS", "EPSG:3857");
-            url.addParameter("WIDTH", "769");
-            url.addParameter("HEIGHT", "763");
+            if (x > y) {
+                ymin -= (x-y)/2;
+                ymax += (x-y)/2;
+            } else if (y > x) {
+                xmin -= (y-x)/2;
+                xmax += (y-x)/2;
+            }
+            url.addParameter("WIDTH", "700");
+            url.addParameter("HEIGHT", "700");
             url.addParameter("BBOX", xmin + "," + ymin + "," + xmax + "," + ymax);
 
             System.out.println(url.toString());
