@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.1.3.RELEASE'
 	id 'java'
+	// id 'war'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -9,15 +10,13 @@ group = 'info.proadmintierra'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-repositories {
-	mavenCentral()
-}
-
 bootJar {
     baseName = 'rdm-server'
     version =  '0.1.0'
 }
-
+repositories {
+	mavenCentral()
+}
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -29,5 +28,6 @@ dependencies {
 	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.8'
+	// providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

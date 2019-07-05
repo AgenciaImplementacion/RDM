@@ -289,4 +289,26 @@ public class ParcelQueryRestController {
             return "{\"error\":\"" + e.getMessage() + "\"}";
         }
     }
+
+    @GetMapping(value = "/public/parcel/cadastralcode", produces = { "application/json" })
+    public String getCadastralCode(@RequestParam(required = false) Integer id) {
+        String sql = "";
+        try {
+            Postgres conn = new Postgres();
+            conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
+            sql = "select json_build_object('numero_predial',p.numero_predial) from "
+            +this.rdmSchema +".terreno t JOIN "
+            +this.rdmSchema +".uebaunit u ON t.t_id=u.ue_terreno JOIN "
+            +this.rdmSchema +".predio p ON u.baunit_predio = p.t_id where t.t_id = "+id;
+            String response = conn.queryToString(sql);
+            conn.disconnect();
+            if (response != null)
+                return response;
+            else
+                return "{\"error\":\"No se encontraron registros.\"}";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{\"error\":\"" + e.getMessage() + "\"}";
+        }
+    }
 }
