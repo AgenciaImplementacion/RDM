@@ -53,6 +53,12 @@ public class ParcelQueryRestController {
 	private String classForName;
 	@Value("${geoserver.url}")
 	private String geoserverUrl;
+	@Value("${databaseVU.datasource}")
+	private String databaseVUDatasource;
+	@Value("${databaseVU.datasource.username}")
+	private String databaseVUUsername;
+	@Value("${databaseVU.datasource.password}")
+	private String databaseVUPassword;
 
 	@GetMapping(value = "/public/parcel", produces = { "application/json" })
 	public String getParcelBasicInfo(@RequestParam(required = false) String nupre,
@@ -284,15 +290,15 @@ public class ParcelQueryRestController {
 			connRDM.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
 
 			Postgres conn = new Postgres();
-			conn.connect("jdbc:postgresql://192.168.98.69:5432/rdm_dev_2", "postgres", "123456", this.classForName);
+			conn.connect(this.databaseVUDatasource, this.databaseVUUsername, this.databaseVUPassword,
+					this.classForName);
 
 			String sqlObjects = "SELECT * FROM vu.objects_special_regime;";
 			ResultSet resultsetObjects = conn.getResultSetFromSql(sqlObjects);
-			
+
 			JsonArray restrictions = new JsonArray();
 
 			while (resultsetObjects.next()) {
-				//System.out.println(resultsetObjects.getString("wsurl"));
 
 				String sqlCategories = "SELECT * FROM vu.category WHERE id_object_special_regime = "
 						+ resultsetObjects.getString("id") + ";";
@@ -320,8 +326,6 @@ public class ParcelQueryRestController {
 
 					for (int i = 0; i < features.size(); i++) {
 
-						//System.out.println("feature " + i);
-
 						JsonObject feature = (JsonObject) features.get(i);
 
 						JsonObject geometry = (JsonObject) feature.get("geometry");
@@ -330,7 +334,9 @@ public class ParcelQueryRestController {
 						while (resultsetCategories.next()) {
 
 							String fieldCategory = resultsetCategories.getString("field");
-							String valueCategory = resultsetCategories.getString("value")!=null?resultsetCategories.getString("value").toString():"";
+							String valueCategory = resultsetCategories.getString("value") != null
+									? resultsetCategories.getString("value").toString()
+									: "";
 
 							try {
 								String fieldValue = properties.get(fieldCategory).getAsString();
@@ -348,22 +354,23 @@ public class ParcelQueryRestController {
 
 									String sqlInterset = "select poligono_creado , "
 											+ "st_area(st_intersection(poligono_creado, ST_Transform(ST_GeomFromGeoJSON('"
-											+ geometryString + "'), 3116))) as cruce, st_area(poligono_creado) as area from canutalito.terreno t "
+											+ geometryString
+											+ "'), 3116))) as cruce, st_area(poligono_creado) as area from canutalito.terreno t "
 											+ "where t.t_id = " + id + ";";
 
 									ResultSet resultsetIntersect = connRDM.getResultSetFromSql(sqlInterset);
 									resultsetIntersect.next();
-									
+
 									Float cruce = Float.parseFloat(resultsetIntersect.getString("cruce"));
 									Float area = Float.parseFloat(resultsetIntersect.getString("area"));
-									DecimalFormat frmt= new DecimalFormat("###.##");
+									DecimalFormat frmt = new DecimalFormat("###.##");
 									if (cruce > 0) {
-										System.out.println("FELIPE");
 										while (resultsetRestrictions.next()) {
 											JsonObject afectaciones = new JsonObject();
 											afectaciones.addProperty("area", frmt.format(area));
 											afectaciones.addProperty("objeto", resultsetRestrictions.getString("name"));
-											afectaciones.addProperty("proportion", frmt.format((cruce/area)*100)+"%");
+											afectaciones.addProperty("proportion",
+													frmt.format((cruce / area) * 100) + "%");
 											afectaciones.addProperty("t_id", resultsetRestrictions.getString("id"));
 											restrictions.add(afectaciones);
 										}
@@ -384,26 +391,23 @@ public class ParcelQueryRestController {
 
 			conn.disconnect();
 			connRDM.disconnect();
-			
+
 			return restrictions.toString();
-			
-/*
-			Postgres conn = new Postgres();
-			conn.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
-			sql = "select json_agg( json_build_object('t_id', t_id, 'objeto', CASE WHEN identificador='1' THEN 'Ronda Hidrica' WHEN identificador='2' THEN 'Area Protegida' WHEN identificador='3' THEN 'Desarrollo Restringido POT' WHEN identificador='4' THEN 'Zona Militar' END, 'area', st_area(st_intersection(geometria, (select poligono_creado from "
-					+ this.rdmSchema + ".terreno where t_id= " + id
-					+ "))), 'proportion', (st_area(st_intersection(geometria, (select poligono_creado from "
-					+ this.rdmSchema + ".terreno where t_id= " + id + ")))/st_area((select poligono_creado from "
-					+ this.rdmSchema + ".terreno where t_id= " + id + "))) ) ) from " + this.rdmSchema
-					+ ".zona_homogenea_fisica WHERE ST_Intersects(geometria, (select poligono_creado from "
-					+ this.rdmSchema + ".terreno where t_id= " + id + "))=TRUE";
-			String response = conn.queryToString(sql);
-			conn.disconnect();
-			if (response != null)
-				return response;
-			else
-				return "{\"error\":\"No se encontraron registros.\"}";
-		 */
+
+			/*
+			 * Postgres conn = new Postgres(); conn.connect(this.connectionString,
+			 * this.connectionUser, this.connectionPassword, this.classForName); sql =
+			 * "select json_agg( json_build_object('t_id', t_id, 'objeto', CASE WHEN identificador='1' THEN 'Ronda Hidrica' WHEN identificador='2' THEN 'Area Protegida' WHEN identificador='3' THEN 'Desarrollo Restringido POT' WHEN identificador='4' THEN 'Zona Militar' END, 'area', st_area(st_intersection(geometria, (select poligono_creado from "
+			 * + this.rdmSchema + ".terreno where t_id= " + id +
+			 * "))), 'proportion', (st_area(st_intersection(geometria, (select poligono_creado from "
+			 * + this.rdmSchema + ".terreno where t_id= " + id +
+			 * ")))/st_area((select poligono_creado from " + this.rdmSchema +
+			 * ".terreno where t_id= " + id + "))) ) ) from " + this.rdmSchema +
+			 * ".zona_homogenea_fisica WHERE ST_Intersects(geometria, (select poligono_creado from "
+			 * + this.rdmSchema + ".terreno where t_id= " + id + "))=TRUE"; String response
+			 * = conn.queryToString(sql); conn.disconnect(); if (response != null) return
+			 * response; else return "{\"error\":\"No se encontraron registros.\"}";
+			 */
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "{\"error\":\"" + e.getMessage() + "\"}";
