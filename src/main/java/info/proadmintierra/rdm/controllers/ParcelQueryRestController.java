@@ -286,6 +286,7 @@ public class ParcelQueryRestController {
 		String sql = "";
 		try {
 
+			
 			Postgres connRDM = new Postgres();
 			connRDM.connect(this.connectionString, this.connectionUser, this.connectionPassword, this.classForName);
 
@@ -390,7 +391,7 @@ public class ParcelQueryRestController {
 			}
 
 			conn.disconnect();
-			connRDM.disconnect();
+			//connRDM.disconnect();
 
 			return restrictions.toString();
 
